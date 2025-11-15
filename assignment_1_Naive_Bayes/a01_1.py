@@ -15,7 +15,7 @@
 # %%
 
 # %% [markdown]
-# # Task 1: Train a Naive Bayes Classifier
+# # 1: Train a Naive Bayes Classifier
 # The class `nb_train` is located in `a01_functions.py`. You can make
 # experimental changes to that class in the other file (`a01_functions.py`). All
 # saved changes will be automatically reflected here due to the IPython
@@ -60,6 +60,8 @@ yex = np.array([0, 1, 2, 0])
 # %% [markdown]
 # # 1 Training
 
+
+
 # %%
 # Test your code (there should be a warning when you run this)
 model = nb_train(Xex, yex, alpha=1)
@@ -89,3 +91,22 @@ model
 #         [[-1.38629436, -0.69314718, -1.38629436],
 #          [-1.38629436, -0.69314718, -1.38629436]]]),
 #  'logpriors': array([-0.84729786, -1.25276297, -1.25276297])}
+
+# %%
+# tests
+print("Xex:\n", Xex)
+print("yex:", yex)
+print("unique labels and counts:", np.unique(yex, return_counts=True))
+print("shape:", Xex.shape)
+
+model = nb_train(Xex, yex, alpha=1)
+print("Priors before log:", np.exp(model["logpriors"]))
+print("Logpriors:", model["logpriors"])
+print("Logcls shape:", model["logcls"].shape)
+print("Logcls (class 0):\n", model["logcls"][0])
+
+model = nb_train(Xex, yex, alpha=1)
+print("Priors before log:", np.exp(model["logpriors"]))
+print("Logpriors:", model["logpriors"])
+print("yex dtype:", yex.dtype)
+print("yex values:", yex)

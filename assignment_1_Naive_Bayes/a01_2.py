@@ -27,3 +27,5 @@ nb_predict(model, Xex)
 # This should produce:
 # {'logprob': array([-0.41925843, -0.55388511, -0.68309684, -0.29804486]),
 #  'yhat': array([0, 1, 2, 0], dtype=int64)}
+
+# %%

@@ -1,17 +1,11 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: percent
-#       format_version: '1.3'
-#       jupytext_version: 1.16.7
-# ---
+
+
+
+
+
 
 # %%
 import numpy as np
-
-# %%
 def logsumexp(x):
     """Computes log(sum(exp(x)).
 
@@ -61,6 +55,8 @@ def nb_train(X, y, alpha=1, K=None, C=None):
         such that logcls[c,j,v] contains the conditional log-likelihood of value
         v in feature j given class c.
     """
+    X = np.asarray(X, dtype=int)
+    y = np.asarray(y, dtype=int).ravel()
     N, D = X.shape
     if K is None:
         K = np.max(X) + 1
@@ -68,16 +64,33 @@ def nb_train(X, y, alpha=1, K=None, C=None):
         C = np.max(y) + 1
 
     # Compute class priors and store them in priors
-    priors = np.zeros(C)
+    priors = np.zeros(C, dtype=float)
     # YOUR CODE HERE
+    
+    for c in range(C):
+        Nc = np.sum(y == c)
+        priors[c] = (Nc + (alpha - 1)) / (N + C * (alpha - 1))
 
     # Compute class-conditional densities in a class x feature x value array
     # and store them in cls.
-    cls = np.zeros((C, D, K))
+    cls = np.zeros((C, D, K), dtype=float)
     # YOUR CODE HERE
+    for c in range(C):
+        Xc = X[y == c]
+        Nc = Xc.shape[0]
+        if Nc == 0:
+            continue
+        for j in range(D):
+            counts = np.bincount(Xc[:, j], minlength=K)
+            cls[c, j, :] = (counts + (alpha - 1)) / (Nc + K * (alpha - 1))
+
+    # Apply epsilon only when smoothing is used
+    if alpha > 1:
+        priors[priors == 0] = np.finfo(float).tiny
+        cls[cls == 0] = np.finfo(float).tiny
 
     # Output result
-    return dict(logpriors=np.log(priors), logcls=np.log(cls))
+    return dict(logcls=np.log(cls), logpriors=np.log(priors))
 
 
 # %%
@@ -112,12 +125,19 @@ def nb_predict(model, Xnew):
     yhat = np.zeros(Nnew).astype(np.int64)
     logprob = np.zeros(Nnew)
     # YOUR CODE HERE
+    for i in range(Nnew):
+        for c in range(C):
+            logjoint[i, c] = logpriors[c] + np.sum(logcls[c, np.arange(D), Xnew[i, :]])
 
     # Compute predicted labels (in "yhat") and their log probabilities
     # P(yhat_i | x_i) (in "logprob")
     # YOUR CODE HERE
+    for i in range(Nnew):
+        yhat[i] = np.argmax(logjoint[i, :])
+        offset = np.max(logjoint[i, :])
+        logprob[i] = logjoint[i, yhat[i]] - (offset + np.log(np.sum(np.exp(logjoint[i, :] - offset))))
 
-    return dict(yhat=yhat, logprob=logprob)
+    return dict(logprob=logprob, yhat=yhat)
 
 
 # %%
@@ -141,13 +161,22 @@ def nb_generate(model, ygen):
     logcls = model["logcls"]
     n = len(ygen)
     C, D, K = logcls.shape
-    Xgen = np.zeros((n, D))
+    Xgen = np.zeros((n, D), dtype=int)
     for i in range(n):
         c = ygen[i]
         # Generate the i-th example of class c, i.e., row Xgen[i,:]. To sample
         # from a categorical distribution with parameter theta (a probability
         # vector), you can use np.random.choice(range(K),p=theta).
         # YOUR CODE HERE
+        # Compute normalization manually (same logic as your logsumexp)
+        logp = logcls[c]                      # shape (D, K)
+        offset = np.max(logp, axis=1, keepdims=True)
+        probs = np.exp(logp - offset)         # avoid overflow
+        probs /= probs.sum(axis=1, keepdims=True)  # normalize per feature
+
+        # Sample one pixel value per feature
+        for j in range(D):
+            Xgen[i, j] = np.random.choice(np.arange(K), p=probs[j])
 
     return Xgen
     
