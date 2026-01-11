@@ -30,6 +30,7 @@ np.random.seed(15)
 # The date is being loaded via `a03_helper.py`
 
 # Plot the coordinates
+
 plot_xy(lon, lat)
 
 
@@ -125,6 +126,21 @@ plot_xy(lon, lat, U[:, 0])
 # For interpretation, it may also help to look at the other component matrices and
 # perhaps use other plot functions (e.g., plot_matrix).
 # YOUR PART
+# for interpretation and combining with the SVD background knowledge from the lecture to see the above is potentially enough
+# However just some additional tests
+# Take first two and last two singular vectors
+idx = [0, 1, U.shape[1]-2, U.shape[1]-1]
+
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+
+for ax, k in zip(axs.flatten(), idx):
+    plot_xy(lon, lat, U[:, k], axis=ax)
+    ax.set_title(f"Left singular vector $u_{{{k+1}}}$ over locations", fontsize=16)
+    ax.set_xlabel("Longitude", fontsize=16)
+    ax.set_ylabel("Latitude", fontsize=16)
+    ax.tick_params(labelsize=14)
+
+plt.tight_layout()
 
 # %% [markdown]
 # ## 2d
@@ -272,7 +288,7 @@ def rmse(X, X_hat):
 
 # Noise levels
 epsilons = np.linspace(0.0, 2.0, 10)
-Z_values = [1, 2, 5, 10, 48]  # ranks to compare
+Z_values = [1, 2, 3, 10, 25, 48]  # ranks to compare
 
 # Storage for RMSE curves
 rmse_results = {Z: [] for Z in Z_values}
@@ -296,6 +312,9 @@ for eps in epsilons:
 # Plot RMSE vs epsilon for each Z and baseline
 plt.figure(figsize=(10,6))
 
+# Here is the empty plot that you need to fill (one line per choice of Z: RSME between
+# original X and the reconstruction from size-Z SVD of noisy versions)
+# YOUR PART
 # Plot Z-curves first
 for Z in Z_values:
     plt.plot(epsilons, rmse_results[Z], "o-", label=f"Z = {Z}")
@@ -318,14 +337,6 @@ plt.grid(True)
 plt.legend(fontsize=12)
 plt.show()
 
-# %%
-# Here is the empty plot that you need to fill (one line per choice of Z: RSME between
-# original X and the reconstruction from size-Z SVD of noisy versions)
-# YOUR PART
-nextplot()
-plt.plot()
-plt.xlabel(r"Noise level ($\epsilon$)")
-plt.ylabel("Reconstruction RMSE vs. original data")
 
 
 # %%

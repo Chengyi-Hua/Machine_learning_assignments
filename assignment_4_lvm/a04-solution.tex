@@ -1,0 +1,92 @@
+% Do not change document class, margins, fonts, etc.
+\documentclass[a4paper,oneside,bibliography=totoc]{scrartcl}
+
+% some useful packages (add more as needed)
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{algorithm} % you can modify the algorithm style to your liking
+\usepackage{algorithmic}
+\usepackage{csquotes}
+\renewcommand{\algorithmiccomment}[1]{\hfill\textit{// #1}}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[colorlinks,citecolor=Green]{hyperref} % you may change/remove the colors
+\usepackage{lipsum} % you do not need this
+
+% chicago citation style
+\usepackage{natbib}
+\bibliographystyle{chicagoa}
+\setcitestyle{authoryear,round,semicolon,aysep={},yysep={,}} \let\cite\citep
+
+% example enviroments (add more as needed)
+\newtheorem{definition}{Definition} \newtheorem{proposition}{Proposition}
+
+\begin{document}
+
+\title{ML25, Assignment 4}
+\author{Student 1 (login)\\
+  Student 2 (login)}
+\date{\today}
+\maketitle
+
+\section{Probabilistic PCA}
+
+You can find examples on how to fill out this template
+\href{https://www.uni-mannheim.de/media/Einrichtungen/dws/Files_Teaching/Theses/dws-templates.zip}{here}.
+
+\section{Gaussian Mixture Models}
+
+
+\clearpage
+\section*{Ehrenwörtliche Erklärung}
+
+Ich versichere, dass ich die beiliegende Bachelor-, Master-, Seminar-, oder
+Projektarbeit ohne Hilfe Dritter und ohne Benutzung anderer als der angegebenen
+Quellen und in der untenstehenden Tabelle angegebenen Hilfsmittel angefertigt
+und die den benutzten Quellen wörtlich oder inhaltlich entnommenen Stellen als
+solche kenntlich gemacht habe. Diese Arbeit hat in gleicher oder ähnlicher Form
+noch keiner Prüfungsbehörde vorgelegen. Ich bin mir bewusst, dass eine falsche
+Erklärung rechtliche Folgen haben wird.
+
+% Declare below which AI tools you used in the process of writing your work,
+% including text, image, code, and data generation.
+%
+% The AI declaration must include an entry for every task. The entry should
+% state whether or not you used AI to solve parts of the task. Using AI for
+% things such as language improvements or API search does not count as "Solved
+% with AI", but things such as code gen, writing drafts, or solving math tasks
+% does.
+%
+% We may grade tasks that you (partially or fully) solved with AI more
+% stringently. So make sure that whenever you use AI, the results are correct.
+% Our recommendation is to not use AI to solve the tasks, as this undermines the
+% learning goals of this course and, ultimately, your own education.
+\begin{center}
+  \textbf{Declaration of Used AI Tools} \\[.3em]
+  \begin{tabularx}{\textwidth}{lclXc}
+    \toprule
+    Task & Solved with AI? & Tool & Purpose & Useful? \\
+    \midrule
+    1a & Yes & ChatGPT & Generate draft solution & yes \\
+    1b \\
+    1c \\
+    1d \\
+    2a \\
+    2b \\
+    2c \\
+    2d \\
+    2e \\
+    2f \\
+    \bottomrule
+  \end{tabularx}
+\end{center}
+
+\vspace{2cm}
+\noindent Unterschrift\\
+\noindent Mannheim, den XX.XX.2025 \hfill
+
+\end{document}
